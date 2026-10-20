@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly Class Job Chart</title>
+<style>
+:root{--ink:#18343b;--cream:#fff8e8;--teal:#137c78;--coral:#f27960;--sun:#f6c957;--sky:#d9f0f5;--leaf:#d8edc8}
+*{box-sizing:border-box} body{margin:0;min-height:100vh;background:linear-gradient(135deg,#d7f2ef,#fff2cf 65%,#ffe0d3);color:var(--ink);font-family:"Trebuchet MS",Arial,sans-serif;overflow-x:hidden}
+main{max-width:1500px;margin:auto;padding:clamp(20px,4vw,58px)} header{text-align:center;margin-bottom:clamp(18px,3vh,38px)} .eyebrow{font-size:clamp(14px,1.3vw,20px);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)} h1{margin:.15em 0;font-size:clamp(38px,6vw,82px);line-height:1.02;letter-spacing:-.045em} .subtitle{font-size:clamp(16px,2vw,25px);color:#45636a}
+.weekline{display:flex;justify-content:center;align-items:center;gap:12px;font-weight:800;font-size:clamp(16px,1.8vw,24px);margin-top:18px}.weekline input{font:inherit;border:2px solid #87bab4;border-radius:14px;background:#ffffffbb;padding:9px 14px;color:var(--ink);width:min(280px,55vw)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.5vw,22px);margin:28px 0}.card{position:relative;min-height:clamp(220px,31vh,340px);border:3px solid #ffffffd9;border-radius:28px;padding:clamp(16px,2vw,28px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 14px 30px #28545220;transition:transform .35s,box-shadow .35s;background:var(--sky)}.card:nth-child(2){background:#ffe0d6}.card:nth-child(3){background:var(--leaf)}.card:nth-child(4){background:#ffe8aa}.card:nth-child(5){background:#e8dcf7}.icon{font-size:clamp(40px,5vw,68px);margin-bottom:15px}.job-subtitle{font-size:clamp(14px,1.4vw,19px);font-weight:800;color:#45636a;margin-top:-5px}.expectations{font-size:clamp(14px,1.3vw,18px);line-height:1.35;text-align:left;align-self:stretch;margin-top:12px;padding-left:20px}.expectations:empty{display:none}.expectations li{margin:3px 0}.job{font-weight:900;font-size:clamp(17px,2vw,27px);line-height:1.12;min-height:2.25em;display:flex;align-items:center;justify-content:center}.student{font-weight:900;font-size:clamp(22px,2.5vw,36px);margin-top:14px;color:#0e6d69;min-height:1.2em}.card.revealed{transform:translateY(-6px) rotate(-1deg);box-shadow:0 20px 38px #28545235}.card.spinning .student{animation:pop .28s ease-in-out infinite alternate;color:#b84c3c}@keyframes pop{to{transform:scale(1.08);opacity:.55}}
+.controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}.button{border:0;border-radius:18px;padding:16px 30px;background:var(--teal);color:white;font-size:clamp(18px,2vw,26px);font-weight:900;box-shadow:0 7px 0 #0c5d5a;cursor:pointer;transition:transform .12s,box-shadow .12s}.button:hover{filter:brightness(1.08)}.button:active{transform:translateY(4px);box-shadow:0 3px 0 #0c5d5a}.button.secondary{background:#fff;color:var(--ink);box-shadow:0 7px 0 #c8d8d4}.tip{font-size:14px;text-align:center;color:#45636a;margin-top:18px}
+details{max-width:850px;margin:24px auto 0;background:#ffffffa8;border:1px solid #ffffff;border-radius:18px;padding:14px 20px}summary{cursor:pointer;font-weight:800;font-size:16px}.editor{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}.editor textarea{flex:1;min-width:220px;min-height:100px;border:1px solid #aac8c4;border-radius:12px;padding:12px;font:16px/1.5 Arial}.editor button{border:0;border-radius:12px;padding:12px 18px;background:#18343b;color:white;font-weight:800;cursor:pointer}.note{font-size:13px;color:#5b7075;margin-top:8px}
+@media(max-width:950px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.grid{grid-template-columns:1fr 1fr}.card{min-height:200px;border-radius:20px}.card:last-child{grid-column:auto}.job{font-size:17px}.student{font-size:22px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">Our classroom • Our team</div><h1>Weekly Job Chart</h1><div class="weekline"><label for="week">Week of</label><input id="week" type="text" placeholder="Add this week's date"></div></header>
+<section class="grid" id="cards" aria-live="polite"></section>
+<div class="controls"><button class="button" id="shuffle">🎉 Shuffle &amp; Reveal Jobs</button><button class="button secondary" id="fullscreen">⛶ Full screen</button></div>
+<div class="tip">Press <b>F</b> for full screen · Press <b>Space</b> to shuffle again</div>
+<details><summary>✏️ Set up the class list</summary><div class="editor"><textarea id="names" aria-label="Student names" placeholder="Type one student's name on each line"></textarea><button id="save">Save class list</button></div><div class="note">Your class list is saved in this browser on this device. Each shuffle gives six different students one job each.</div></details>
+</main>
+<script>
+const jobs=[
+ ['🌞','Morning Greeting',['Class motto','Deep breathing','Class watchwords','Shake hands','Class affirmations'],'Lead class in'],
+ ['🙏','Prayer',['Lead the lunch time prayer','Lead the afternoon prayer']],
+ ['📚','Library Corner',['Keep books in order']],
+ ['📖','Books',['Distribute and collect books','Keep the bookshelf in order']],
+ ['✅','Attendance',['Count how many boys and girls are present each day','Collect the roll book and return it to the office']],
+ ['♻️','Recycling',['Ensure bottles are crushed and taken to the bin at the end of the week']]
+];
+const storeKey='weekly-class-job-chart-names-v1';let names=[];
+try{names=JSON.parse(localStorage.getItem(storeKey)||'[]')}catch{}
+const cardHost=document.getElementById('cards');
+function draw(){cardHost.innerHTML=jobs.map(([icon,job,expectations,subtitle],i)=>`<article class="card" id="card${i}"><div class="icon">${icon}</div><div class="job">${job}</div>${subtitle?`<div class="job-subtitle">${subtitle}</div>`:''}<ul class="expectations">${expectations.map(item=>`<li>${item}</li>`).join('')}</ul><div class="student" id="student${i}">Ready!</div></article>`).join('')}
+function cleanNames(text){return [...new Set(text.split(/\n|,/).map(x=>x.trim()).filter(Boolean))]}
+document.getElementById('names').value=names.join('\n');
+document.getElementById('save').addEventListener('click',()=>{names=cleanNames(document.getElementById('names').value);localStorage.setItem(storeKey,JSON.stringify(names));draw();if(names.length<6)alert('Please enter at least six students to assign all the jobs.')});
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+let timer;
+document.getElementById('shuffle').addEventListener('click',()=>{clearInterval(timer);names=cleanNames(document.getElementById('names').value);if(names.length<6){alert('Open “Set up the class list” and enter at least six student names first.');document.querySelector('details').open=true;return}const chosen=shuffle([...names]).slice(0,6),cards=jobs.map((_,i)=>document.getElementById('card'+i)),labels=jobs.map((_,i)=>document.getElementById('student'+i));cards.forEach(c=>{c.classList.remove('revealed');c.classList.add('spinning')});let ticks=0;timer=setInterval(()=>{labels.forEach((el,i)=>el.textContent=names[Math.floor(Math.random()*names.length)]);ticks++;if(ticks>=15){clearInterval(timer);labels.forEach((el,i)=>el.textContent=chosen[i]);cards.forEach((c,i)=>{c.classList.remove('spinning');setTimeout(()=>c.classList.add('revealed'),i*150)})}},95)});
+document.getElementById('fullscreen').addEventListener('click',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()});
+document.addEventListener('keydown',e=>{if(e.key.toLowerCase()==='f'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName))document.getElementById('fullscreen').click();if(e.code==='Space'&&!['INPUT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();document.getElementById('shuffle').click()}});draw();
+</script></body></html>
+
